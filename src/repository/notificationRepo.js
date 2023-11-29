@@ -4,9 +4,21 @@ class notificationRepository{
     
     async create(data){
         try {
-            console.log(data);
             const ticket = await NotificationTicket.create(data);
             return ticket;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async getAllMails(status){
+        try {
+            const tickets = await NotificationTicket.findAll({
+                where: {
+                    status: status,
+                }
+            });
+            return tickets;
         } catch (error) {
             console.log(error);
         }

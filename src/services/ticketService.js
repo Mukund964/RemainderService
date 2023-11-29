@@ -13,6 +13,15 @@ class notificationService{
             console.log(error);
         }
     }
+
+    async getallMails(status){
+        try {
+            const tickets = await this.ticketService.getAllMails(status.status);
+            return tickets;
+        } catch (error) {
+            console.log(error);
+        }
+    }
 }
 
 module.exports = notificationService;
