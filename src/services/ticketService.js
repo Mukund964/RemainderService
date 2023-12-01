@@ -14,10 +14,19 @@ class notificationService{
         }
     }
 
-    async getallMails(status){
+    async getallMails(filter){
         try {
-            const tickets = await this.ticketService.getAllMails(status.status);
+            const tickets = await this.ticketService.getAllMails(filter);
             return tickets;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async updateTicket(ticketId, data){
+        try {
+            const ticket = await this.ticketService.update(ticketId,data);
+            return ticket; 
         } catch (error) {
             console.log(error);
         }

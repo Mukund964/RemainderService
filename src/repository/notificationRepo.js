@@ -1,4 +1,5 @@
 const {NotificationTicket} = require('../models/index');
+const { Op }= require('sequelize')
 
 class notificationRepository{
     
@@ -11,14 +12,28 @@ class notificationRepository{
         }
     }
 
-    async getAllMails(status){
+    async getAllMails(filter){
         try {
             const tickets = await NotificationTicket.findAll({
                 where: {
-                    status: status,
+                    status: filter.status,
+                    notificationTime:{
+                        [Op.lte] : new Date()
+                    }
                 }
             });
             return tickets;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async update(id,data){
+        try {
+            const ticket = await NotificationTicket.findByPk(id);
+            ticket.status = data.status;
+            ticket.save();
+            return ticket;
         } catch (error) {
             console.log(error);
         }
