@@ -1,16 +1,19 @@
 const express = require('express');
 const bodyParser = require("body-parser");
 const apiRoutes = require('./routers/index');
-const {PORT} = require("./config/serverConfig")
+const {PORT,REMAINDER_BINDING_KEY} = require("./config/serverConfig")
 const setupJobs = require('./utils/sendMailCron');
+const {createChannel,subscribeMessage} = require('./utils/MessageQueues')
 const app = express();
 
 
-const setupAndStartServer = ()=>{
+const setupAndStartServer = async ()=>{
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({extended:true}));
     app.use('/api',apiRoutes);
-    setupJobs();
+    const channel = await createChannel();
+    subscribeMessage(channel, undefined,REMAINDER_BINDING_KEY);
+    //setupJobs();
     app.listen(PORT,()=>{
         console.log(`Listening on port ${PORT}`);
     });

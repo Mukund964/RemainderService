@@ -5,7 +5,7 @@ const createChannel = async() => {
     try {
         const connection = await amqplib.connect(MSG_BROKER_URL);
         const channel = await connection.createChannel()
-        await Channel.assertExchange(EXCHANGE_NAME,'direct',false);
+        await channel.assertExchange(EXCHANGE_NAME,'direct',false);
         return channel;
         
     } catch (error) {
@@ -15,10 +15,9 @@ const createChannel = async() => {
 
 const subscribeMessage = async(channel,service,binding_Key) =>{
     try {
-        const applicationQueue = await channel.assertQueue('QUEUE_NAME');
-        channel.bindQueue(applicationQueue,EXCHANGE_NAME,binding_Key);
-        channel.consume(applicationQueue.queue,msg => {
-            console.log('Receivied data');
+        const applicationQueue = await channel.assertQueue('REMINDER_QUEUE');
+        channel.bindQueue(applicationQueue.queue,EXCHANGE_NAME,binding_Key);
+        channel.consume(applicationQueue.queue,(msg) => {
             console.log(msg.content.toString());
             channel.ack(msg);
         })
