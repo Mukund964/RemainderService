@@ -1,10 +1,8 @@
-const notificationService = require('../services/ticketService');
+const {create} = require('../services/ticketService');
 
-const ticketController = new notificationService();
-
-const create = async (req,res)=>{
+const createTicket = async (req,res)=>{
     try {
-        const response = await ticketController.create(req.body);
+        const response = await create(req.body);
         res.status(500).json({
             data:response,
             err: {},
@@ -22,5 +20,5 @@ const create = async (req,res)=>{
 }
 
 module.exports = {
-    create
+    createTicket
 }

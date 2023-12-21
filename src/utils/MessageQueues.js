@@ -18,7 +18,8 @@ const subscribeMessage = async(channel,service,binding_Key) =>{
         const applicationQueue = await channel.assertQueue('REMINDER_QUEUE');
         channel.bindQueue(applicationQueue.queue,EXCHANGE_NAME,binding_Key);
         channel.consume(applicationQueue.queue,(msg) => {
-            console.log(msg.content.toString());
+            const payload = JSON.parse(msg.content.toString());
+             service(payload);
             channel.ack(msg);
         })
     } catch (error) {

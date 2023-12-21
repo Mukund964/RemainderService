@@ -1,36 +1,42 @@
+
 const notificationRepository = require('../repository/notificationRepo');
 
-class notificationService{
-    constructor(){
-        this.ticketService = new notificationRepository();
-    }
+const ticketService = new notificationRepository();
 
-    async create(data){
-        try {
-            const ticket = await this.ticketService.create(data);
-            return ticket;
-        } catch (error) {
-            console.log(error);
-        }
+const create = async (data) =>{
+    try {
+        console.log(data);
+        const ticket = await ticketService.create(data);
+        return ticket;
+    } catch (error) {
+        console.log(error);
     }
-
-    async getallMails(filter){
-        try {
-            const tickets = await this.ticketService.getAllMails(filter);
-            return tickets;
-        } catch (error) {
-            console.log(error);
-        }
+}
+const updateTicket = async(ticketId, data) =>{
+    try {
+        const ticket = await ticketService.update(ticketId,data);
+        return ticket; 
+    } catch (error) {
+        console.log(error);
     }
-
-    async updateTicket(ticketId, data){
-        try {
-            const ticket = await this.ticketService.update(ticketId,data);
-            return ticket; 
-        } catch (error) {
-            console.log(error);
-        }
+}
+const getAllMails = async (filter) =>{
+    try {
+        const tickets = await ticketService.getAllMails(filter);
+        return tickets;
+    } catch (error) {
+        console.log(error);
     }
 }
 
-module.exports = notificationService;
+const subscribeEvent = async(payload)=>{
+    await create(payload);
+}
+
+
+module.exports = {
+    create,
+    getAllMails,
+    updateTicket,
+    subscribeEvent
+};

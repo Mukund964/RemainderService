@@ -1,11 +1,10 @@
 const cron = require('node-cron');
-const notificationService = require('../services/ticketService');
+const {getAllMails,updateTicket} = require('../services/ticketService')
 const transporter = require('../config/mailConfig');
 
-const ticketservice = new notificationService();
 const setupJobs = () => {
     cron.schedule('*/5 * * * * *', async () => {
-      const PendingTickets = await ticketservice.getallMails({status:'Pending'});
+      const PendingTickets = await getAllMails({status:'Pending'});
       PendingTickets.forEach((ticket) => {
           transporter.sendMail({
             from : "irctc@admin.com",
@@ -15,7 +14,7 @@ const setupJobs = () => {
           }, async (err,data) => {
             if(!err){
                 // update status 
-              await ticketservice.updateTicket(ticket.id,{status : "Sent"});
+              await updateTicket(ticket.id,{status : "Sent"});
             }else {
               console.log(err);
             }
